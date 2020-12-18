@@ -1,21 +1,29 @@
-// let ourRequest = new XMLHttpRequest()
-// ourRequest.open('GET', 'https://learnweb.github.io/json-example/pets-data.json')
-// ourRequest.onload = () => {
-//   if (ourRequest.status >= 200 && ourRequest.status < 400) {
-//     let data = JSON.parse(ourRequest.responseText)
-//     createHTML(data)
-//   } else {
-//     console.log('We connected to the server, but it returned an error.')
-//   }
-// }
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
+const exphbs = require('express-handlebars')
+// const { join } = require('path')
 
-// ourRequest.onerror = () => {
-//   console.log('Connection error')
-// }
+app.use(express.static(__dirname + '/public'))
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
-// ourRequest.send()
+// app.use(require('./routes'))
 
-// function createHTML(petsData) {
-//   console.log('testing from our function')
-//   console.log(petsData)
-// }
+// handlebars setting
+app.set('view engine', 'hbs')
+app.engine('hbs', exphbs({
+  extname: 'hbs',
+  defaultLayout: 'index',
+  layoutsDir: __dirname + '/views/layouts',
+  partialsDir: __dirname + '/views/partials'
+}))
+
+const port = 8900
+app.listen(port)
+console.log('Listening on server: http://localhost:8900')
+
+// Landing page
+app.get('/', (req, res) => {
+  res.render('main')
+})
